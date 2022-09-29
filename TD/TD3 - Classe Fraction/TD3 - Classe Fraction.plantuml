@@ -1,0 +1,15 @@
+@startuml
+
+class Fraction{
+    numerateur : int
+    denominateur : int
+    Fraction(int num = 0, int den = 1)
+    getNumerateur() const : int
+    getDenominateur() const : int
+    setFraction(int n, int d) : void
+	  simplification() :void
+	  somme(const Fraction& a, const Fraction& b) : Fraction
+	  ~ Fraction()
+}
+
+@enduml
