@@ -1,0 +1,20 @@
+// Exercice 23 : Diagramme UML de la classe Personne
+
+@startuml
+
+class Personne{
+  - nom : str
+  - prenom : str
+  - annee_naissance : unsigned int
+  - sexe : enum Sexe{homme, femme}
+  - situation : enum Situation{marie, veuf}
+  + getNom() const : string
+  + getPrenom() const : string
+  + getAnneeNaissance() : unsigned int
+  + getSexe() const : Sexe
+  + getSituation() const : Situation
+  + age(annee_en_cours : unsigned int) const : unsigned int
+  + Personne(nom : string, prenom : string, annee_naiss : unsigned int, sexe : Sexe, situation : Situation)
+}
+
+@enduml

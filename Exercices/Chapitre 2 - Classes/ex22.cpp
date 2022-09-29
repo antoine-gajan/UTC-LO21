@@ -1,8 +1,7 @@
-//Exercice 21 - Constructeur
+//Exercice 22 - Allocation dynamique
 
 //Une personne est définie par son sexe, nom, prénom, date de naissance et situation familiale
-//Créer le constructeur qui initialise tous les attributs
-
+//Allouer une personne dynamiquement
 #include <iostream>
 #include "ex21.h"
 
@@ -23,4 +22,11 @@ Personne::Personne(const string& n, const string& p, unsigned int a, Sexe sex, S
     annee_naissance = a;
     sexe = sex;
     situation = situ;
+}
+
+int main()
+{
+    Personne *p = new Personne("gajan", "antoine", 2003, homme, marie);
+    delete p;
+    return 0;
 }

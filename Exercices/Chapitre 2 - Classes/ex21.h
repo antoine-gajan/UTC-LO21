@@ -9,7 +9,7 @@
 enum Sexe {homme, femme};
 enum Situation {marie, veuf};
 
-class Personne()
+class Personne
 {
 private:
     std::string nom;
@@ -19,12 +19,12 @@ private:
     Situation situation;
 //Méthodes inlines pour les accesseurs
 public:
-    string getNom() const {return nom;}
-    string getPrenom() const {return prenom;}
+    std::string getNom() const {return nom;}
+    std::string getPrenom() const {return prenom;}
     unsigned int getAnneeNaissance() const {return annee_naissance;}
     Sexe getSexe() const {return sexe;}
     Situation getSituation() const {return situation;}
     unsigned int age(unsigned int annee_en_cours) const;
     //Ajout du constructeur
-    Personne(const string& nom, const string& prenom, unsigned int annee_naiss, Sexe sexe, Situation situ);
+    Personne(const std::string& nom, const std::string& prenom, unsigned int annee_naiss, Sexe sexe, Situation situ);
 };
