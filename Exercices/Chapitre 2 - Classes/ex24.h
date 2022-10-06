@@ -1,0 +1,33 @@
+//Exercice 24 - Utilisation sstream
+
+//Une personne est définie par son sexe, nom, prénom, date de naissance et situation familiale
+//Créer un constructeur
+
+#include <iostream>
+#include <sstream>
+#include <string>
+
+enum Sexe {homme, femme};
+enum Situation {marie, veuf, celibataire};
+
+class Personne
+{
+private:
+    std::string nom;
+    std::string prenom;
+    unsigned int annee_naissance;
+    Sexe sexe;
+    Situation situation;
+//Méthodes inlines pour les accesseurs
+public:
+    std::string getNom() const {return nom;}
+    std::string getPrenom() const {return prenom;}
+    unsigned int getAnneeNaissance() const {return annee_naissance;}
+    Sexe getSexe() const {return sexe;}
+    Situation getSituation() const {return situation;}
+    unsigned int age(unsigned int annee_en_cours) const;
+    //Ajout du constructeur
+    Personne(const std::string& nom, const std::string& prenom, unsigned int annee_naiss, Sexe sexe, Situation situ);
+    std::string retourneInfos() const;
+};
+
