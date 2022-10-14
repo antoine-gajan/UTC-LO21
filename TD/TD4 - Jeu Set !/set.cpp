@@ -67,6 +67,7 @@ namespace Set {
 		for (auto r : Remplissages) f << r << " ";
 		f << "\n";
 	}
+
 	//Surcharge de l'opérateur << pour afficher une carte sur le flux
 	std::ostream& operator<<(std::ostream& flux, Carte c)
 	{
@@ -108,13 +109,14 @@ namespace Set {
 		return *cartes[i];
 	}
 
-	Pioche::Pioche(const Jeu& j)
+	Pioche::Pioche()
 	{
-		nb = j.getNbCartes();
-		cartes = new const Carte* [j.getNbCartes()];
-		for (size_t i = 0; i < j.getNbCartes(); i++)
-		{
-			cartes[i] = &j.getCarte(i);
+		Jeu& jeu = Jeu::getInstance();
+		nb = jeu.getNbCartes();
+		size_t i = 0;
+		cartes = new const Carte* [nb];
+		for (Jeu::Iterator it = jeu.getIterator(); !it.isDone(); it.next()) {
+			cartes[i++] = &it.currentItem();
 		}
 	}
 
@@ -215,8 +217,39 @@ namespace Set {
 		for (size_t i = 0; i < nb; i++)
 		{
 			flux << *cartes[i];
-			if (i % 3 == 0) flux << "\n";
+			if ((i+1) % 3 == 0) flux << "\n";
 		}
 		flux << "\n";
+	}
+	Controleur::Controleur() : plateau(Plateau())
+	{
+		pioche = new Pioche();
+	}
+	Controleur::~Controleur()
+	{
+		delete pioche;
+	}
+	void Controleur::distribuer()
+	{
+		if (plateau.getNbCartes() < 12)
+		{
+			while (!pioche->estVide() && plateau.getNbCartes() < 12)
+			{
+				plateau.ajouter(pioche->piocher());
+			}
+		}
+		else
+		{
+			if (!pioche->estVide()) plateau.ajouter(pioche->piocher());
+		}
+		
+	}
+	Jeu& Jeu::getInstance()
+	{
+		if (sing.instance == nullptr)
+		{
+			sing.instance = new Jeu();
+		}
+		return *sing.instance;
 	}
 }

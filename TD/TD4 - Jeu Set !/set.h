@@ -51,6 +51,7 @@ namespace Set {
 	//Classe Carte
 	class Carte
 	{
+		friend class Jeu;
 	private:
 		Couleur couleur;
 		Nombre nombre;
@@ -71,14 +72,34 @@ namespace Set {
 		//Impossible de dupliquer un Jeu par construction ou par affectation
 		Jeu(const Jeu&) = delete;
 		Jeu& operator=(const Jeu&) = delete;
-
-	public:
-		//Constructeur et destructeur
+		//Constructeur et destructeur privé pour créer la classe Singleton
 		Jeu();
 		~Jeu();
+		const Carte& getCarte(size_t i) const;
+		//Classe singleton
+		class Singleton
+		{
+		public:
+			Jeu* instance = nullptr;
+			~Singleton() { delete instance; instance = nullptr; }
+		};
+		static Singleton sing;
+	public:
 		//Fonction qui retourne le nombre de cartes dans le jeu
 		size_t getNbCartes() const { return 81; };
-		const Carte& getCarte(size_t i) const;
+		static Jeu& getInstance();
+		class Iterator
+		{
+			friend class Jeu;
+		private:
+			size_t current;
+			Iterator() : current(0) {}
+		public:
+			bool isDone() const { return current == Jeu::getInstance().getNbCartes(); }
+			const Carte& currentItem() const { return Jeu::getInstance().getCarte(current); }
+			Iterator next() { current++; }
+		};
+		Iterator getIterator() const { return Iterator(); }
 	};
 
 	//Classe Pioche
@@ -90,7 +111,7 @@ namespace Set {
 		Pioche& operator= (const Pioche& p) = delete;
 		Pioche(const Pioche&) = delete;
 	public:
-		Pioche(const Jeu& j);
+		Pioche();
 		~Pioche();
 		size_t getNbCartes() const { return nb; };
 		bool estVide() const { return nb == 0; };
@@ -109,9 +130,37 @@ namespace Set {
 		Plateau(const Plateau& p);
 		Plateau& operator=(const Plateau& p);
 		~Plateau() { delete[] cartes; };
+		size_t getNbCartes() const { return nbMax; }
 		void ajouter(const Carte& carte);
 		void retirer(const Carte& carte);
 		void print(ostream& flux = cout);
+		friend class Plateau;
+		class Iterator
+		{
+		private:
+			const Carte** current;
+		public:
+			Iterator(const Carte** c) : current(c) {}
+			Iterator& operator++() { current++; return *this; }
+			const Carte& operator *() const { return **current; }
+			bool operator!=(Iterator it) const { return current != it.current; }
+		};
+		Iterator begin() const { return Iterator(cartes); }
+		Iterator end() const { return Iterator(cartes + nb); }
+	};
+
+	//Classe Controleur
+	class Controleur
+	{
+	private:
+		Plateau plateau;
+		Pioche* pioche;
+		Controleur& operator= (const Controleur& c) = delete;
+		Controleur(const Controleur& c) = delete;
+	public:
+		Controleur();
+		~Controleur();
+		void distribuer();
 	};
 
 	//Surchage de << pour afficher une carte
